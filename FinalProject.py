@@ -28,11 +28,31 @@ class TypingTest(EasyFrame):
         self.typingArea = self.addTextArea(text="", row=2, column=0,
                                            columnspan=3)
         
-        self.saveButton = self.addButton(row=4, column=0, text="Save")
-        self.startButton = self.addButton(row=4, column=1, text="Start")
-        self.resetButton = self.addButton(row=4, column=2, text="Reset")
+        self.startButton = self.addButton(row=4, column=1, text="Start", command = self.start)
+        self.saveButton = self.addButton(row=4, column=0, text="End", command=self.end)
+        self.resetButton = self.addButton(row=4, column=2, text="Reset", command=self.reset)
 
         self.outputLabel = self.addLabel(text="outputs", row=5, column=1)
+
+    def start(self):
+        """starts timer and displays text"""
+        self.isRunning = True
+        self.seconds = time.time()
+        i = random.randint(1, 6)
+        self.correctString = DICTIONARY[i]
+        self.displayLabel["text"] = self.correctString
+
+    def end(self):
+        """ends timer and runs method to calculate outputs"""
+        if(self.isRunning):
+            self.isRunning = False
+            self.timerSeconds = time.time() - self.seconds
+
+    def reset(self):
+        """resets the program"""
+        self.isRunning = False
+        self.typingArea.setText("")
+        self.outputLabel["text"] = ""
 
 
 def main():
