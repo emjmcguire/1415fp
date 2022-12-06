@@ -5,6 +5,9 @@ File name: FinalProjectInTk.py
 """
 
 import tkinter as tk
+import random
+import time
+import json 
 
 class TypingTest(tk.Tk):
     
@@ -37,7 +40,7 @@ class TypingTest(tk.Tk):
 
         #Create buttons within button section
         self.startButton = tk.Button(master=self.buttonFrame, text="Start", width=7, height=1,
-                                bg="gray", fg="black")
+                                bg="gray", fg="black", command=self.start)
         self.endButton = tk.Button(master=self.buttonFrame, text="End", width=7, height=1,
                               bg="gray", fg="black")
         self.resetButton = tk.Button(master=self.buttonFrame, text="Reset", width=7, height=1,
@@ -46,6 +49,20 @@ class TypingTest(tk.Tk):
         self.startButton.pack()
         self.endButton.pack()
         self.resetButton.pack()
+
+    def start(self):
+        """starts timer and displays text"""
+        self.isRunning = True
+        self.seconds = time.time()
+        file = open(self.fileEntry.get())
+        DICTIONARY = json.load(file)
+        file.close()
+        i = str(random.randint(1, 4))
+        self.correctString = DICTIONARY[i]
+        self.listOfChars = []
+        for char in DICTIONARY[i]:
+            self.listOfChars.append(char)
+        self.textLabel.config(text=self.correctString)
 
 def main():
     TypingTest().mainloop()
