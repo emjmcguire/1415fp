@@ -5,7 +5,6 @@ File name: FinalProject.py
 """
 
 from breezypythongui import EasyFrame
-import threading
 import random
 import time
 
@@ -40,20 +39,44 @@ class TypingTest(EasyFrame):
         self.seconds = time.time()
         i = random.randint(1, 6)
         self.correctString = DICTIONARY[i]
+        self.listOfChars = []
+        for char in DICTIONARY[i]:
+            self.listOfChars.append(char)
         self.displayLabel["text"] = self.correctString
 
     def end(self):
         """ends timer and runs method to calculate outputs"""
         if(self.isRunning):
+            self.timerSeconds = time.time() - self.seconds 
+            self.checkText()
+            self.calculateOutputs()
             self.isRunning = False
-            self.timerSeconds = time.time() - self.seconds
 
     def reset(self):
         """resets the program"""
         self.isRunning = False
+        self.displayLabel["text"] = "Press Start"
         self.typingArea.setText("")
         self.outputLabel["text"] = ""
 
+    def checkText(self):
+        """checks user inputs"""
+        if(self.isRunning):
+            self.userText = self.typingArea.getText()
+            self.correctChars = 0
+            self.incorrectChars = -1
+            count = 0
+            for char in self.userText:
+                if char == self.listOfChars[count]:
+                    self.correctChars += 1
+                    count += 1
+                else:
+                    self.incorrectChars += 1
+                    count += 1
+
+    def calculateOutputs(self):
+        """displays outputs based on inputs"""
+        self.outputLabel["text"] = self.correctChars, self.incorrectChars, self.userText, self.listOfChars
 
 def main():
     TypingTest().mainloop()
