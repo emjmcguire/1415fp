@@ -63,10 +63,14 @@ class TypingTest(EasyFrame):
         """checks user inputs"""
         if(self.isRunning):
             self.userText = self.typingArea.getText()
+            self.userText = self.userText[:-1]
+            self.userTextList = []
             self.correctChars = 0
-            self.incorrectChars = -1
+            self.incorrectChars = 0
             count = 0
             for char in self.userText:
+                self.userTextList.append(char)
+            for char in self.userTextList:
                 if char == self.listOfChars[count]:
                     self.correctChars += 1
                     count += 1
@@ -76,7 +80,7 @@ class TypingTest(EasyFrame):
 
     def calculateOutputs(self):
         """displays outputs based on inputs"""
-        self.outputLabel["text"] = self.correctChars, self.incorrectChars, self.userText, self.listOfChars
+        self.outputLabel["text"] = self.correctChars, self.incorrectChars, self.userTextList
 
 def main():
     TypingTest().mainloop()
