@@ -7,10 +7,8 @@ File name: FinalProject.py
 from breezypythongui import EasyFrame
 import random
 import time
+import json 
 
-#Dictionary for testing
-DICTIONARY = {1:"paragraph one", 2:"paragraph two", 3:"paragraph three",
-              4:"paragraph four", 5:"paragraph five", 6:"paragraph six"}
 
 class TypingTest(EasyFrame):
    
@@ -20,6 +18,7 @@ class TypingTest(EasyFrame):
         self.setSize(500, 500)
         
         #create labels and buttons
+        self.fileLabel = self.addLabel(text="File Name:", row=0, column=0, sticky="NE")
         self.fileName = self.addTextField(text="", row=0, column = 1, sticky="NW")
 
         self.displayLabel = self.addLabel(text="Paragraph to display", row=1,
@@ -33,11 +32,16 @@ class TypingTest(EasyFrame):
 
         self.outputLabel = self.addLabel(text="outputs", row=5, column=1)
 
+
+
     def start(self):
         """starts timer and displays text"""
         self.isRunning = True
         self.seconds = time.time()
-        i = random.randint(1, 6)
+        file = open(self.fileName.getText())
+        DICTIONARY = json.load(file)
+        file.close()
+        i = str(random.randint(1, 4))
         self.correctString = DICTIONARY[i]
         self.listOfChars = []
         for char in DICTIONARY[i]:
@@ -47,7 +51,7 @@ class TypingTest(EasyFrame):
     def end(self):
         """ends timer and runs method to calculate outputs"""
         if(self.isRunning):
-            self.timerSeconds = time.time() - self.seconds 
+            self.timerSeconds = round(time.time() - self.seconds, 2)
             self.checkText()
             self.calculateOutputs()
             self.isRunning = False
@@ -80,7 +84,14 @@ class TypingTest(EasyFrame):
 
     def calculateOutputs(self):
         """displays outputs based on inputs"""
-        self.outputLabel["text"] = self.correctChars, self.incorrectChars, self.userTextList
+        userWordList = []
+        for word in self.userText.split(" "):
+            userWordList.append(word)
+        wps = float(len(userWordList)) / self.timerSeconds
+        cps = float(len(self.userText)) / self.timerSeconds
+        wpm = round(wps * 60, 2)
+        cpm = round(cps * 60, 2)
+        self.outputLabel["text"] = "It took you " + str(self.timerSeconds) + " seconds to type the paragraph.\nWPM = " + str(wpm) + "\nCPM = " + str(cpm)
 
 def main():
     TypingTest().mainloop()
