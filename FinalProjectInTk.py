@@ -58,6 +58,7 @@ class TypingTest(tk.Tk):
         self.outputLabel = tk.Label(text="test")
         self.outputLabel.pack()
 
+        #Set running to false initially
         self.isRunning = False
 
     def start(self):
@@ -77,20 +78,26 @@ class TypingTest(tk.Tk):
     def end(self):
         """ends timer and runs method to calculate outputs"""
         if(self.isRunning):
+            #Stop timer
             self.timerSeconds = round(time.time() - self.seconds, 2)
+            #Run methods to check text and calculate outputs
             self.checkText()
             self.calculateOutputs()
+            #Set running to false
             self.isRunning = False
     
     def reset(self):
         """resets the program"""
+        #Set running to false
         self.isRunning = False
+        #Reset/clear labels and text areas
         self.textLabel.config(text="Type a file name and press Start")
         self.userTextArea.delete("1.0", "end")
-        self.outputLabel.config(text="differenttest")
+        self.outputLabel.config(text="test")
 
     def checkText(self):
         """checks user inputs"""
+        #If program is running get text from text area
         if(self.isRunning):
             self.userText = self.userTextArea.get("1.0", "end")
             self.userText = self.userText[:-1]
@@ -98,8 +105,10 @@ class TypingTest(tk.Tk):
             self.correctChars = 0
             self.incorrectChars = 0
             count = 0
+            #Append each character to list
             for char in self.userText:
                 self.userTextList.append(char)
+            #Check for correct/incorrect characters in user's text
             for char in self.userTextList:
                 if char == self.listOfChars[count]:
                     self.correctChars += 1
@@ -107,17 +116,21 @@ class TypingTest(tk.Tk):
                 else:
                     self.incorrectChars += 1
                     count += 1
+        #Display user text in output label (FOR TESTING)
         self.outputLabel.config(text = self.userText)
 
     def calculateOutputs(self):
         """displays outputs based on inputs"""
         userWordList = []
+        #Append words user typed to list
         for word in self.userText.split(" "):
             userWordList.append(word)
+        #Calculate wps/wpm cps/cpm
         wps = float(len(userWordList)) / self.timerSeconds
         cps = float(len(self.userText)) / self.timerSeconds
         wpm = round(wps * 60, 2)
         cpm = round(cps * 60, 2)
+        #Display outputs 
         self.outputLabel.config(text= "It took you " + str(self.timerSeconds) + " seconds to type the paragraph.\nWPM = " + str(wpm) + "\nCPM = " + str(cpm))
 
 def main():
