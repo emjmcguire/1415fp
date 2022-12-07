@@ -42,13 +42,23 @@ class TypingTest(tk.Tk):
         self.startButton = tk.Button(master=self.buttonFrame, text="Start", width=7, height=1,
                                 bg="gray", fg="black", command=self.start)
         self.endButton = tk.Button(master=self.buttonFrame, text="End", width=7, height=1,
-                              bg="gray", fg="black")
+                              bg="gray", fg="black", command=self.end)
         self.resetButton = tk.Button(master=self.buttonFrame, text="Reset", width=7, height=1,
-                                bg="gray", fg="black")
+                                bg="gray", fg="black", command=self.reset)
 
         self.startButton.pack()
         self.endButton.pack()
         self.resetButton.pack()
+
+        #Create frame for outputs section
+        self.outputFrame = tk.Frame()
+        self.outputFrame.pack()
+
+        #Create label within outputs section
+        self.outputLabel = tk.Label(text="test")
+        self.outputLabel.pack()
+
+        self.isRunning = False
 
     def start(self):
         """starts timer and displays text"""
@@ -63,6 +73,52 @@ class TypingTest(tk.Tk):
         for char in DICTIONARY[i]:
             self.listOfChars.append(char)
         self.textLabel.config(text=self.correctString)
+
+    def end(self):
+        """ends timer and runs method to calculate outputs"""
+        if(self.isRunning):
+            self.timerSeconds = round(time.time() - self.seconds, 2)
+            self.checkText()
+            self.calculateOutputs()
+            self.isRunning = False
+    
+    def reset(self):
+        """resets the program"""
+        self.isRunning = False
+        self.textLabel.config(text="Type a file name and press Start")
+        self.userTextArea.delete("1.0", "end")
+        self.outputLabel.config(text="differenttest")
+
+    def checkText(self):
+        """checks user inputs"""
+        if(self.isRunning):
+            self.userText = self.userTextArea.get("1.0", "end")
+            self.userText = self.userText[:-1]
+            self.userTextList = []
+            self.correctChars = 0
+            self.incorrectChars = 0
+            count = 0
+            for char in self.userText:
+                self.userTextList.append(char)
+            for char in self.userTextList:
+                if char == self.listOfChars[count]:
+                    self.correctChars += 1
+                    count += 1
+                else:
+                    self.incorrectChars += 1
+                    count += 1
+        self.outputLabel.config(text = self.userText)
+
+    def calculateOutputs(self):
+        """displays outputs based on inputs"""
+        userWordList = []
+        for word in self.userText.split(" "):
+            userWordList.append(word)
+        wps = float(len(userWordList)) / self.timerSeconds
+        cps = float(len(self.userText)) / self.timerSeconds
+        wpm = round(wps * 60, 2)
+        cpm = round(cps * 60, 2)
+        self.outputLabel.config(text= "It took you " + str(self.timerSeconds) + " seconds to type the paragraph.\nWPM = " + str(wpm) + "\nCPM = " + str(cpm))
 
 def main():
     TypingTest().mainloop()
