@@ -1,8 +1,3 @@
-"""
-Author: Em McGuire
-File name: FinalProjectInTk.py
-
-"""
 
 import tkinter as tk
 import random
@@ -55,24 +50,37 @@ class TypingTest(tk.Tk):
         self.outputFrame.pack()
 
         #Create label within outputs section
+        self.userTextLabel = tk.Label(text="test")
         self.outputLabel = tk.Label(text="test")
+        self.userTextLabel.pack()
         self.outputLabel.pack()
 
         #Set running to false initially
         self.isRunning = False
+        #Bind keypresses to text area
+        self.userTextArea.bind("<Return>", self.endOnEnter)
+        self.userTextArea.bind("<Key>", self.displayOnKeypress)
 
     def start(self):
-        """starts timer and displays text"""
+        self.reset()
+        """starts a timer and displays text to be typed"""
+        #Starts program running
         self.isRunning = True
+        #Starts timer
         self.seconds = time.time()
+        #Opens file
         file = open(self.fileEntry.get())
+        #Converts to dictionary
         DICTIONARY = json.load(file)
         file.close()
+        #Chooses random item
         i = str(random.randint(1, 4))
         self.correctString = DICTIONARY[i]
+        #Creates a list out of the dictionary item string
         self.listOfChars = []
         for char in DICTIONARY[i]:
             self.listOfChars.append(char)
+        #Displays dictionary string
         self.textLabel.config(text=self.correctString)
 
     def end(self):
@@ -94,6 +102,7 @@ class TypingTest(tk.Tk):
         self.textLabel.config(text="Type a file name and press Start")
         self.userTextArea.delete("1.0", "end")
         self.outputLabel.config(text="test")
+        self.userTextLabel.config(text="")
 
     def checkText(self):
         """checks user inputs"""
@@ -110,7 +119,9 @@ class TypingTest(tk.Tk):
                 self.userTextList.append(char)
             #Check for correct/incorrect characters in user's text
             for char in self.userTextList:
-                if char == self.listOfChars[count]:
+                if self.userTextList >= self.listOfChars:
+                    self.end()
+                elif char == self.listOfChars[count]:
                     self.correctChars += 1
                     count += 1
                 else:
@@ -118,6 +129,20 @@ class TypingTest(tk.Tk):
                     count += 1
         #Display user text in output label (FOR TESTING)
         self.outputLabel.config(text = self.userText)
+    
+    def endOnEnter(self, event):
+        self.end()
+
+    def checkLength(self):
+        if len(self.userText) == len(self.listOfChars):
+
+    def updateAsTyped(self):
+        self.checkLength()
+        self.checkText()
+        self.userTextLabel.config(text=self.userText, fg="red")
+
+    def displayOnKeypress(self, event):
+        self.updateAsTyped()
 
     def calculateOutputs(self):
         """displays outputs based on inputs"""
