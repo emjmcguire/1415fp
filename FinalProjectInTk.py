@@ -59,11 +59,11 @@ class TypingTest(tk.Tk):
         self.isRunning = False
         #Bind keypresses to text area
         self.userTextArea.bind("<Return>", self.endOnEnter)
-        self.userTextArea.bind("<Key>", self.displayOnKeypress)
+        self.userTextArea.bind("<Key>", self.updateOnKeypress)
 
     def start(self):
+        """resets all fields, starts a timer and displays text to be typed"""
         self.reset()
-        """starts a timer and displays text to be typed"""
         #Starts program running
         self.isRunning = True
         #Starts timer
@@ -84,18 +84,19 @@ class TypingTest(tk.Tk):
         self.textLabel.config(text=self.correctString)
 
     def end(self):
-        """ends timer and runs method to calculate outputs"""
+        """ends timer, sets running to false and displays outputs"""
         if(self.isRunning):
             #Stop timer
             self.timerSeconds = round(time.time() - self.seconds, 2)
-            #Run methods to check text and calculate outputs
-            self.checkText()
-            self.calculateOutputs()
             #Set running to false
             self.isRunning = False
+            self.calculateResults()
+
+    def endOnEnter(self, event):
+        self.end()
     
     def reset(self):
-        """resets the program"""
+        """resets the program by clearing all fields and setting running to false"""
         #Set running to false
         self.isRunning = False
         #Reset/clear labels and text areas
@@ -119,9 +120,7 @@ class TypingTest(tk.Tk):
                 self.userTextList.append(char)
             #Check for correct/incorrect characters in user's text
             for char in self.userTextList:
-                if self.userTextList >= self.listOfChars:
-                    self.end()
-                elif char == self.listOfChars[count]:
+                if char == self.listOfChars[count]:
                     self.correctChars += 1
                     count += 1
                 else:
@@ -129,22 +128,21 @@ class TypingTest(tk.Tk):
                     count += 1
         #Display user text in output label (FOR TESTING)
         self.outputLabel.config(text = self.userText)
-    
-    def endOnEnter(self, event):
-        self.end()
 
     def checkLength(self):
         if len(self.userText) == len(self.listOfChars):
+            self.end()
 
-    def updateAsTyped(self):
-        self.checkLength()
-        self.checkText()
-        self.userTextLabel.config(text=self.userText, fg="red")
-
-    def displayOnKeypress(self, event):
-        self.updateAsTyped()
+    def updateOnKeypress(self, event):
+        if self.isRunning:
+            self.checkText()
+            self.checkLength()
+            self.calculateOutputs()
 
     def calculateOutputs(self):
+        self.userTextLabel.config(text=self.userText, fg="red")
+
+    def calculateResults(self):
         """displays outputs based on inputs"""
         userWordList = []
         #Append words user typed to list
