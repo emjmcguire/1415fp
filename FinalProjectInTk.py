@@ -81,7 +81,7 @@ class TypingTest(tk.Tk):
         DICTIONARY = json.load(file)
         file.close()
         #Chooses random item
-        i = str(random.randint(1, 4))
+        i = str(random.randint(1, 6))
         self.correctString = DICTIONARY[i]
         #Creates a list out of the dictionary item string
         self.listOfChars = []
@@ -95,6 +95,7 @@ class TypingTest(tk.Tk):
         if(self.isRunning):
             #Stop timer
             self.timerSeconds = round(time.time() - self.seconds, 2)
+            self.userTextArea.config(state="disabled")
             #Set running to false
             self.isRunning = False
             self.checkText()
@@ -109,8 +110,11 @@ class TypingTest(tk.Tk):
         self.isRunning = False
         #Reset/clear labels and text areas
         self.textLabel.config(text="Type a file name and press Start")
+        self.userTextArea.config(state="normal")
         self.userTextArea.delete("1.0", "end")
-        self.wpmLabel.config(text="test")
+        self.wpmLabel.config(text="WPM: -")
+        self.accuracyLabel.config(text="Accuracy: -")
+        self.awpmLabel.config(text="AWPM: -")
         self.userTextLabel.config(text="")
 
     def checkText(self):
@@ -133,8 +137,6 @@ class TypingTest(tk.Tk):
                 else:
                     self.incorrectChars += 1
                     count += 1
-        #Display user text in output label (FOR TESTING)
-        self.wpmLabel.config(text = self.listOfChars)
 
     def checkLength(self):
         if len(self.userText) == len(self.listOfChars):
@@ -152,17 +154,17 @@ class TypingTest(tk.Tk):
         #Calculate wpm and accuracy
         cps = float(len(self.userText)) / self.timerSeconds
         wpm = round((cps * 60)/5, 2)
-        accuracyPercent = round(self.correctChars/len(self.listOfChars), 2)
-        awpm = wpm * accuracyPercent
+        accuracyPercent = round(self.correctChars/len(self.listOfChars), 2) * 100
+        awpm = wpm * accuracyPercent /100
 
         #Display outputs 
         if self.correctChars == len(self.listOfChars):
-            self.userTextLabel.config(text=self.userTextList, fg="green")
+            self.userTextLabel.config(text=self.userText, fg="green")
         else:
-            self.userTextLabel.config(text=self.userTextList, fg="green")
-        self.wpmLabel.config(text= "WPM: " + str(self.listOfChars))
-        self.accuracyLabel.config(text= self.userTextList)
-        self.awpmLabel.config(text= "AWPM: " + str(self.correctChars) + " " + str(self.incorrectChars))
+            self.userTextLabel.config(text=self.userText, fg="red")
+        self.wpmLabel.config(text= "WPM: " + str(wpm))
+        self.accuracyLabel.config(text="Accuracy: " + str(accuracyPercent) + "%")
+        self.awpmLabel.config(text= "AWPM: " + str(awpm))
     
     def getInterpretation(self):
         self.interpretationLabel.config(text= self.userText)
