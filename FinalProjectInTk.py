@@ -10,28 +10,28 @@ class TypingTest(tk.Tk):
         super().__init__()
 
         #Create frame for file section
-        self.fileFrame = tk.Frame()
-        self.fileFrame.pack()
+        fileFrame = tk.Frame()
+        fileFrame.pack(fill="both")
 
         #Create label and entry for file within fileFrame
-        self.fileLabel = tk.Label(master=self.fileFrame, text="File Name: ")
-        self.fileEntry = tk.Entry(master=self.fileFrame, fg="black", bg="white", width=40)
-        self.fileLabel.pack()
-        self.fileEntry.pack()
+        self.fileLabel = tk.Label(master=fileFrame, text="File Name: ")
+        self.fileEntry = tk.Entry(master=fileFrame, fg="black", bg="white", width=40)
+        self.fileLabel.pack(pady=5)
+        self.fileEntry.pack(pady=5)
 
         #Create frame for text section
         self.textFrame = tk.Frame()
-        self.textFrame.pack()
+        self.textFrame.pack(pady=5)
 
         #Create label and text area within text section
         self.textLabel = tk.Label(master=self.textFrame, text="Paragraph")
-        self.userTextArea = tk.Text(master=self.textFrame, height=3, width=70)
-        self.textLabel.pack()
-        self.userTextArea.pack()
+        self.userTextArea = tk.Text(master=self.textFrame, height=4)
+        self.textLabel.pack(pady=5)
+        self.userTextArea.pack(pady=5, padx=30)
 
         #Create frame for button section
         self.buttonFrame = tk.Frame()
-        self.buttonFrame.pack()
+        self.buttonFrame.pack(pady=5, fill="y")
 
         #Create buttons within button section
         self.startButton = tk.Button(master=self.buttonFrame, text="Start", width=7, height=1,
@@ -41,19 +41,19 @@ class TypingTest(tk.Tk):
         self.resetButton = tk.Button(master=self.buttonFrame, text="Reset", width=7, height=1,
                                 bg="gray", fg="black", command=self.reset)
 
-        self.startButton.pack()
-        self.endButton.pack()
-        self.resetButton.pack()
+        self.startButton.pack(side="left", padx=20)
+        self.endButton.pack(side="left", padx=20)
+        self.resetButton.pack(side="left", padx=20)
 
         #Create frame for outputs section
         self.outputFrame = tk.Frame()
-        self.outputFrame.pack()
+        self.outputFrame.pack(pady=5)
 
         #Create label within outputs section
         self.userTextLabel = tk.Label(text="test")
         self.outputLabel = tk.Label(text="test")
-        self.userTextLabel.pack()
-        self.outputLabel.pack()
+        self.userTextLabel.pack(pady=5)
+        self.outputLabel.pack(pady=5)
 
         #Set running to false initially
         self.isRunning = False
