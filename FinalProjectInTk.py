@@ -51,9 +51,15 @@ class TypingTest(tk.Tk):
 
         #Create label within outputs section
         self.userTextLabel = tk.Label(text="test")
-        self.outputLabel = tk.Label(text="test")
+        self.wpmLabel = tk.Label(text="wpm")
+        self.accuracyLabel = tk.Label(text="accuracy")
+        self.awpmLabel = tk.Label(text="awpm")
+        self.interpretationLabel = tk.Label(text="interpretation")
         self.userTextLabel.pack(pady=5)
-        self.outputLabel.pack(pady=5)
+        self.wpmLabel.pack(pady=5)
+        self.accuracyLabel.pack(pady=5)
+        self.awpmLabel.pack(pady=5)
+        self.interpretationLabel.pack(pady=5)
 
         #Set running to false initially
         self.isRunning = False
@@ -64,12 +70,13 @@ class TypingTest(tk.Tk):
     def start(self):
         """resets all fields, starts a timer and displays text to be typed"""
         self.reset()
+        self.keysPressed = 0
         #Starts program running
         self.isRunning = True
         #Starts timer
         self.seconds = time.time()
         #Opens file
-        file = open(self.fileEntry.get())
+        file = open("1415fp.json")
         #Converts to dictionary
         DICTIONARY = json.load(file)
         file.close()
@@ -90,6 +97,7 @@ class TypingTest(tk.Tk):
             self.timerSeconds = round(time.time() - self.seconds, 2)
             #Set running to false
             self.isRunning = False
+            self.checkText()
             self.calculateResults()
 
     def endOnEnter(self, event):
@@ -102,23 +110,22 @@ class TypingTest(tk.Tk):
         #Reset/clear labels and text areas
         self.textLabel.config(text="Type a file name and press Start")
         self.userTextArea.delete("1.0", "end")
-        self.outputLabel.config(text="test")
+        self.wpmLabel.config(text="test")
         self.userTextLabel.config(text="")
 
     def checkText(self):
         """checks user inputs"""
-        #If program is running get text from text area
-        if(self.isRunning):
-            self.userText = self.userTextArea.get("1.0", "end")
-            self.userText = self.userText[:-1]
-            self.userTextList = []
-            self.correctChars = 0
-            self.incorrectChars = 0
-            count = 0
-            #Append each character to list
-            for char in self.userText:
-                self.userTextList.append(char)
-            #Check for correct/incorrect characters in user's text
+        #get text from text area
+        self.userText = self.userTextArea.get("1.0", "end")[:-1]
+        #Append each character to list
+        self.userTextList = []
+        for char in self.userText:
+            self.userTextList.append(char)
+        self.correctChars = 0
+        self.incorrectChars = 0
+        count = 0
+        #Check for correct/incorrect characters in user's text
+        if self.keysPressed >= 2:
             for char in self.userTextList:
                 if char == self.listOfChars[count]:
                     self.correctChars += 1
@@ -127,34 +134,38 @@ class TypingTest(tk.Tk):
                     self.incorrectChars += 1
                     count += 1
         #Display user text in output label (FOR TESTING)
-        self.outputLabel.config(text = self.userText)
+        self.wpmLabel.config(text = self.listOfChars)
 
     def checkLength(self):
         if len(self.userText) == len(self.listOfChars):
             self.end()
 
     def updateOnKeypress(self, event):
+        self.keysPressed += 1
         if self.isRunning:
             self.checkText()
             self.checkLength()
-            self.calculateOutputs()
-
-    def calculateOutputs(self):
-        self.userTextLabel.config(text=self.userText, fg="red")
+            self.userTextLabel.config(text=self.userText, fg="red")
 
     def calculateResults(self):
         """displays outputs based on inputs"""
-        userWordList = []
-        #Append words user typed to list
-        for word in self.userText.split(" "):
-            userWordList.append(word)
-        #Calculate wps/wpm cps/cpm
-        wps = float(len(userWordList)) / self.timerSeconds
+        #Calculate wpm and accuracy
         cps = float(len(self.userText)) / self.timerSeconds
-        wpm = round(wps * 60, 2)
-        cpm = round(cps * 60, 2)
+        wpm = round((cps * 60)/5, 2)
+        accuracyPercent = round(self.correctChars/len(self.listOfChars), 2)
+        awpm = wpm * accuracyPercent
+
         #Display outputs 
-        self.outputLabel.config(text= "It took you " + str(self.timerSeconds) + " seconds to type the paragraph.\nWPM = " + str(wpm) + "\nCPM = " + str(cpm))
+        if self.correctChars == len(self.listOfChars):
+            self.userTextLabel.config(text=self.userTextList, fg="green")
+        else:
+            self.userTextLabel.config(text=self.userTextList, fg="green")
+        self.wpmLabel.config(text= "WPM: " + str(self.listOfChars))
+        self.accuracyLabel.config(text= self.userTextList)
+        self.awpmLabel.config(text= "AWPM: " + str(self.correctChars) + " " + str(self.incorrectChars))
+    
+    def getInterpretation(self):
+        self.interpretationLabel.config(text= self.userText)
 
 def main():
     TypingTest().mainloop()
