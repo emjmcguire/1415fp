@@ -2,7 +2,7 @@
 
 Basic Typing Test
 
-All that's needed for this program is a single level JSON file. 
+All that is needed for this program is a single level JSON file. 
 
 The window has a text entry box for a file name (required to run). After entering the file name, 
 press the Start button to display a line from the file. A timer will start and you will be able to type 
