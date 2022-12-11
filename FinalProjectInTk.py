@@ -3,7 +3,7 @@ Author: Em McGuire
 File Name: FinalProjectInTk.py
 """
 
-
+#PROJECT REQUIREMENTS 5 (tkinter, random, time, and json modules used)
 import tkinter as tk
 import random
 import time
@@ -11,6 +11,7 @@ import json
 
 class TypingTest(tk.Tk):
     
+    #PROJECT REQUIREMENT 1 (GUI environment)
     def __init__(self):
         super().__init__()
         self.title("Typing Speed Test")
@@ -30,6 +31,7 @@ class TypingTest(tk.Tk):
         self.buttonFrame.pack(pady=5, fill="y")
 
         #Create buttons within button section
+        #PROJECT REQUIREMENT 2 (each button has a method)
         self.startButton = tk.Button(master=self.buttonFrame, text="Start", width=7, height=1,
                                 bg="gray", fg="black", command=self.start)
         self.endButton = tk.Button(master=self.buttonFrame, text="End", width=7, height=1,
@@ -58,6 +60,7 @@ class TypingTest(tk.Tk):
         #Set running to false initially
         self.isRunning = False
         #Bind keypresses to text area
+        #PROJECT REQUIREMENT 9 (binding keys to methods)
         self.userTextArea.bind("<Return>", self.endOnEnter)
         self.userTextArea.bind("<Key>", self.updateOnKeypress)
 
@@ -70,8 +73,10 @@ class TypingTest(tk.Tk):
         #Starts timer
         self.seconds = time.time()
         #Opens file
+        #PROJECT REQUIREMENT 4
         file = open("1415fp.json")
         #Converts to dictionary
+        #PROJECT REQUIREMENT 6
         DICTIONARY = json.load(file)
         file.close()
         #Chooses random item
@@ -118,6 +123,7 @@ class TypingTest(tk.Tk):
         #get text from text area
         self.userText = self.userTextArea.get("1.0", "end")[:-1]
         #Append each character to list
+        #PROJECT REQUIREMENT 3 and 8 (list, if/elif, loops, data entry validation)
         self.userTextList = []
         for char in self.userText:
             self.userTextList.append(char)
