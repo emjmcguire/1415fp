@@ -116,7 +116,7 @@ class TypingTest(tk.Tk):
         self.wpmLabel.config(text="WPM: -")
         self.accuracyLabel.config(text="Accuracy: -")
         self.awpmLabel.config(text="AWPM: -")
-        self.userTextLabel.config(text="")
+        self.userTextLabel.config(text="", fg="black")
 
     def checkText(self):
         """checks user inputs"""
