@@ -1,6 +1,6 @@
 # 1415fp
 
-Typing Speed Test
+## Typing Speed Test
 
 ![image](https://user-images.githubusercontent.com/117933370/206912038-93d56412-5c6e-40da-83c0-1c5328e8a664.png)
 
