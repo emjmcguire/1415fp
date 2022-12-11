@@ -24,7 +24,7 @@ class TypingTest(tk.Tk):
         self.textFrame.pack(pady=5)
 
         #Create label and text area within text section
-        self.textLabel = tk.Label(master=self.textFrame, text="Paragraph")
+        self.textLabel = tk.Label(master=self.textFrame, text="Press Start")
         self.userTextArea = tk.Text(master=self.textFrame, height=4)
         self.textLabel.pack(pady=5)
         self.userTextArea.pack(pady=5, padx=30)
@@ -50,10 +50,10 @@ class TypingTest(tk.Tk):
         self.outputFrame.pack(pady=5)
 
         #Create label within outputs section
-        self.userTextLabel = tk.Label(text="test")
-        self.wpmLabel = tk.Label(text="wpm")
-        self.accuracyLabel = tk.Label(text="accuracy")
-        self.awpmLabel = tk.Label(text="awpm")
+        self.userTextLabel = tk.Label(text="")
+        self.wpmLabel = tk.Label(text="WPM: -")
+        self.accuracyLabel = tk.Label(text="Accuracy: -")
+        self.awpmLabel = tk.Label(text="AWPM: -")
         self.interpretationLabel = tk.Label(text="interpretation")
         self.userTextLabel.pack(pady=5)
         self.wpmLabel.pack(pady=5)
@@ -127,16 +127,16 @@ class TypingTest(tk.Tk):
             self.userTextList.append(char)
         self.correctChars = 0
         self.incorrectChars = 0
-        count = 0
+        self.count = 0
         #Check for correct/incorrect characters in user's text
         if self.keysPressed >= 2:
             for char in self.userTextList:
                 if char == self.listOfChars[count]:
                     self.correctChars += 1
-                    count += 1
+                    self.count += 1
                 else:
                     self.incorrectChars += 1
-                    count += 1
+                    self.count += 2
 
     def checkLength(self):
         if len(self.userText) == len(self.listOfChars):
@@ -147,7 +147,7 @@ class TypingTest(tk.Tk):
         if self.isRunning:
             self.checkText()
             self.checkLength()
-            self.userTextLabel.config(text=self.userText, fg="red")
+            self.userTextLabel.config(text=self.userText)
 
     def calculateResults(self):
         """displays outputs based on inputs"""
