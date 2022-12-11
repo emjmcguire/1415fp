@@ -4,7 +4,7 @@ Typing Speed Test
 
 ![image](https://user-images.githubusercontent.com/117933370/206912038-93d56412-5c6e-40da-83c0-1c5328e8a664.png)
 
-The test displays the text you type underneath the text box as you type. It converts to green (if all characters are correct)
+When running FinalProjectInTk.py, the test displays the text you type underneath the text box as you type. It converts to green (if all characters are correct)
 or red (if characters were missed) upon ending the program.
 
 ![image](https://user-images.githubusercontent.com/117933370/206911860-80405512-d980-442c-b982-abecb45b0671.png)
